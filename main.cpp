@@ -34,10 +34,10 @@ int main() {
     bool r = tests[i].first();
     if (!r) {
       ++failed;
-      std::cout << "failed test " << (i + 1) << "\n";
+      std::cout << "[FAIL] TEST " << (i + 1) << "\n";
       std::cout << "\t" << tests[i].second << "\n";
     }
   }
-  std::cout << "SUMMARY:\n\tPASSED: " << (count - failed) << " FAILED: " << (failed) << "\n";
+  std::cout << "SUMMARY:\n\tPASSED: " << (count - failed) << "\n\tFAILED: " << (failed) << "\n";
   return 0;
 }
