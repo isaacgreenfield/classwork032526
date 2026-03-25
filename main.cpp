@@ -15,8 +15,12 @@ bool testGetSize() {
   return !v.getSize();
 }
 bool testSizeOfNonEmptyVector() {
-  Vector<int> v(10, 10);
-  return v.getSize() == 10;
+  try {
+    Vector<int> v(10, 10);
+    return v.getSize() == 10;
+  } catch (...) {
+    return false;
+  }
 }
 
 int main() {

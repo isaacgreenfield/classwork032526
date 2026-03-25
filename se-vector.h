@@ -34,7 +34,12 @@ knk::Vector<T>::Vector(): data_(nullptr), size_(0), capacity_(0) {}
 
 template<class T>
 knk::Vector<T>::Vector(size_t size, const T &value): data_(size ? new T[2*size] : nullptr), size_(size), capacity_(2*size) {
-  for (size_t i = 0; i < size_; ++i) data_[i] = value;
+  try {
+    for (size_t i = 0; i < size; ++i) data_[i] = value;
+  } catch (...) {
+    delete[] data_;
+    throw;
+  }
 }
 
 
