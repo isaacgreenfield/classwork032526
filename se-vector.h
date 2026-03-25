@@ -15,6 +15,8 @@ namespace knk {
 
     bool isEmpty() const noexcept;
     size_t getSize() const noexcept;
+    //realize + test thoroughly these 3 things
+    size_t getCapacity() const noexcept;
 
     void pushBack(const T&);
     void popBack();
