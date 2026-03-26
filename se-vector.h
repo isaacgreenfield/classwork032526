@@ -1,6 +1,8 @@
 #ifndef SE_VECTOR_H
 #define SE_VECTOR_H
 #include <cstddef>
+#include <stdexcept>
+
 namespace knk {
   template <class T>
   class Vector {
@@ -18,8 +20,9 @@ namespace knk {
     //realize + test thoroughly these 3 things
     size_t getCapacity() const noexcept;
 
-    void pushBack(const T&);
+    void pushBack(const T& elem);
     void popBack();
+    void resize();
   private:
     T* data_;
     size_t size_, capacity_;
@@ -65,11 +68,43 @@ size_t knk::Vector<T>::getCapacity() const noexcept {
 }
 
 template<class T>
-void knk::Vector<T>::pushBack(const T &) {
+void knk::Vector<T>::pushBack(const T & elem) {
+  if (data_ == nullptr) {
+    data_ = new T[5];
+    capacity_ = 5;
+  }
+  else {
+    if (size_ == capacity_) {
+      resize();
+    }
+  }
+  data_[size_++] = elem;
 }
 
 template<class T>
 void knk::Vector<T>::popBack() {
+  if (!isEmpty()) size_--;
+  else throw std::logic_error("Cannot pop from empty vector");
+}
+
+template<class T>
+void knk::Vector<T>::resize() {
+  T* newarr = new T[size_];
+  try {
+    for (size_t i = 0; i < size_; ++i) {
+      newarr[i] = data_[i];
+    }
+    delete[] data_;
+    data_ = new T[2*size_];
+    for (size_t i = 0; i < size_; ++i) {
+      data_[i] = newarr[i];
+    }
+    capacity_*=2;
+    delete[] newarr;
+  } catch (...) {
+    delete[] newarr;
+    throw;
+  }
 }
 
 
