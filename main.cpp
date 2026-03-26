@@ -129,12 +129,14 @@ int main() {
   size_t failed = 0;
   for (size_t i = 0; i < count; ++i) {
     bool r = tests[i].first();
-    if (!r) {
+    if (r) {
+      std::cout << "[PASS] TEST " << (i+1) << "\n";
+    } else {
       ++failed;
       std::cout << "[FAIL] TEST " << (i + 1) << "\n";
       std::cout << "\t" << tests[i].second << "\n";
     }
   }
-  std::cout << "SUMMARY:\n\tPASSED: " << (count - failed) << "\n\tFAILED: " << (failed) << "\n";
+  std::cout << "\nSUMMARY:\n\tPASSED: " << (count - failed) << "\n\tFAILED: " << (failed) << "\n";
   return 0;
 }
