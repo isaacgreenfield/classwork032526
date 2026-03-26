@@ -59,5 +59,18 @@ size_t knk::Vector<T>::getSize() const noexcept {
   return size_;
 }
 
+template<class T>
+size_t knk::Vector<T>::getCapacity() const noexcept {
+  return capacity_;
+}
+
+template<class T>
+void knk::Vector<T>::pushBack(const T &) {
+}
+
+template<class T>
+void knk::Vector<T>::popBack() {
+}
+
 
 #endif
