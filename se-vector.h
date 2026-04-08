@@ -11,9 +11,12 @@ namespace knk {
     Vector();
     Vector(size_t size, const T& value);
     explicit Vector(size_t size);
+    Vector(Vector<T> && rhs) noexcept;
+    Vector operator=(Vector<T> && rhs);
 
     Vector(const Vector<T>& rhs);
-    Vector<T>& operator=(const Vector<T> rhs) = delete;
+    Vector<T>& operator=(const Vector<T> rhs);
+    void swap(Vector<T>& rhs);
 
     bool isEmpty() const noexcept;
     size_t getSize() const noexcept;
@@ -21,6 +24,7 @@ namespace knk {
     size_t getCapacity() const noexcept;
 
     void pushBack(const T& elem);
+    void pushFront(const T& elem);
     void popBack();
     void resize();
 
@@ -58,11 +62,39 @@ template<class T>
 knk::Vector<T>::Vector(size_t size): data_(size ? new T[2*size] : nullptr), size_(size), capacity_(2*size) {}
 
 template<class T>
+knk::Vector<T>::Vector(Vector<T> &&rhs) noexcept:
+data_(rhs.data_), capacity_(rhs.capacity_), size_(rhs.size_)
+{
+  rhs.data_ = nullptr;
+}
+
+template<class T>
+knk::Vector<T> knk::Vector<T>::operator=(Vector<T> &&rhs) {
+  Vector<T> cpy(std::move(rhs));
+  swap(cpy);
+  return *this;
+}
+
+template<class T>
 knk::Vector<T>::Vector(const Vector<T> &rhs): Vector(rhs.getSize())
 {
   for (size_t i = 0; i < rhs.getSize(); ++i) {
     data_[i] = rhs.data_[i];
   }
+}
+
+template<class T>
+knk::Vector<T> & knk::Vector<T>::operator=(const Vector<T> rhs) {
+  Vector<T> cpy(rhs);
+  swap(cpy);
+  return *this;
+}
+
+template<class T>
+void knk::Vector<T>::swap(Vector<T> &rhs) {
+  std::swap(data_, rhs.data_);
+  std::swap(size_, rhs.size_);
+  std::swap(capacity_, rhs.capacity_);
 }
 
 
@@ -83,16 +115,20 @@ size_t knk::Vector<T>::getCapacity() const noexcept {
 
 template<class T>
 void knk::Vector<T>::pushBack(const T & elem) {
-  if (data_ == nullptr) {
-    data_ = new T[5];
-    capacity_ = 5;
-  }
-  else {
-    if (size_ == capacity_) {
-      resize();
-    }
-  }
-  data_[size_++] = elem;
+  Vector<T> v(getSize() + 1);
+  v.data_[getSize()] = elem;
+  for (size_t i = 0; i < getSize(); ++i)
+    v.data_[i] = this->get(i);
+  swap(v);
+}
+
+template<class T>
+void knk::Vector<T>::pushFront(const T &elem) {
+  Vector<T> v(getSize() + 1);
+  v.data_[0] = elem;
+  for (size_t i = 1; i < v.getSize(); ++i)
+    v.data_[i] = this->get(i - 1);
+  swap(v);
 }
 
 template<class T>
