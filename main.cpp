@@ -105,12 +105,17 @@ bool testIfDefaultAndDownsizedAreEqualPop() {
   }
 }
 bool testCopyConstructor() {
-  Vector<int> v(2, 2);
-  // how to make vector with set things?
+  Vector<int> v;
+  v.pushBack(1);
+  v.pushBack(2);
   Vector<int> yav = v;
   bool ans = yav.getSize() == v.getSize();
   for (size_t i =0; ans && i< v.getSize(); ++i) {
-    //??? access to elements
+    try {
+      ans = v.at(i) == yav.at(i);
+    } catch (...) {
+      return false;
+    }
   }
   return ans;
 }
@@ -160,7 +165,7 @@ int main() {
       std::cout << "[PASS] TEST " << (i+1) << "\n";
     } else {
       ++failed;
-      std::cout << "[FAIL] TEST " << (i + 1) << "\n";
+      std::cout << "[FAIL] TEST " << (i+1) << "\n";
       std::cout << "\t" << tests[i].second << "\n";
     }
   }
