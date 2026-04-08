@@ -123,13 +123,26 @@ void knk::Vector<T>::resize() {
 
 template<class T>
 T & knk::Vector<T>::get(size_t id) noexcept {
+  return const_cast<T&>(static_cast<const Vector<T>*>(this)->get(id));
+}
 
+template<class T>
+const T & knk::Vector<T>::get(size_t id) const noexcept {
+  return data_[id];
 }
 
 template<class T>
 T & knk::Vector<T>::at(size_t id) {
-  if (id < getSize()) return data_[id];
-  else throw std::logic_error("there is no such element");
+  const Vector<T>* cthis = this;
+  const T& cr = cthis->at(id);
+  T& r = const_cast<T&>(cr);
+  return r;
+}
+
+template<class T>
+const T & knk::Vector<T>::at(size_t id) const {
+  if (id < getSize()) return get(id);
+  throw std::logic_error("there is no such element");
 }
 
 
