@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <stdexcept>
 
+//ДОПИСАТЬ ТЕСТЫ НА ВСЕ НОВЫЕ МЕТОДЫ
 namespace knk {
   template <class T>
   class Vector {
@@ -10,6 +11,7 @@ namespace knk {
     ~Vector();
     Vector();
     Vector(size_t size, const T& value);
+    Vector(std::initializer_list<T>);
     explicit Vector(size_t size);
     Vector(Vector<T> && rhs) noexcept;
     Vector operator=(Vector<T> && rhs);
@@ -32,6 +34,11 @@ namespace knk {
     const T& get(size_t id) const noexcept;
     T& at(size_t id);
     const T& at(size_t id) const;
+
+    //реализовать квадратные скобочки
+    //реализовать итераторы доступа
+    // const && non-const
+    //придумать insert erase но с итераторами
   private:
     T* data_;
     size_t size_, capacity_;
@@ -56,6 +63,11 @@ knk::Vector<T>::Vector(size_t size, const T &value): Vector(size)
     delete[] data_;
     throw;
   }
+}
+
+template<class T>
+knk::Vector<T>::Vector(std::initializer_list<T>) {
+  //....
 }
 
 template<class T>
