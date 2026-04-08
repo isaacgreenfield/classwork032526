@@ -12,7 +12,7 @@ namespace knk {
     Vector(size_t size, const T& value);
     explicit Vector(size_t size);
 
-    Vector(const Vector<T>& rhs) = delete;
+    Vector(const Vector<T>& rhs);
     Vector<T>& operator=(const Vector<T> rhs) = delete;
 
     bool isEmpty() const noexcept;
@@ -23,6 +23,11 @@ namespace knk {
     void pushBack(const T& elem);
     void popBack();
     void resize();
+
+    T& get(size_t id) noexcept;
+    const T& get(size_t id) const noexcept;
+    T& at(size_t id);
+    const T& at(size_t id) const;
   private:
     T* data_;
     size_t size_, capacity_;
@@ -51,6 +56,15 @@ knk::Vector<T>::Vector(size_t size, const T &value): Vector(size)
 
 template<class T>
 knk::Vector<T>::Vector(size_t size): data_(size ? new T[2*size] : nullptr), size_(size), capacity_(2*size) {}
+
+template<class T>
+knk::Vector<T>::Vector(const Vector<T> &rhs): Vector(rhs.getSize())
+{
+  for (size_t i = 0; i < rhs.getSize(); ++i) {
+    data_[i] = rhs.data_[i];
+  }
+}
+
 
 template<class T>
 bool knk::Vector<T>::isEmpty() const noexcept {
@@ -105,6 +119,17 @@ void knk::Vector<T>::resize() {
     delete[] newarr;
     throw;
   }
+}
+
+template<class T>
+T & knk::Vector<T>::get(size_t id) noexcept {
+
+}
+
+template<class T>
+T & knk::Vector<T>::at(size_t id) {
+  if (id < getSize()) return data_[id];
+  else throw std::logic_error("there is no such element");
 }
 
 

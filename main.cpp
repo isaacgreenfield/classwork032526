@@ -104,12 +104,36 @@ bool testIfDefaultAndDownsizedAreEqualPop() {
     return false;
   }
 }
+bool testCopyConstructor() {
+  Vector<int> v(2, 2);
+  // how to make vector with set things?
+  Vector<int> yav = v;
+  bool ans = yav.getSize() == v.getSize();
+  for (size_t i =0; ans && i< v.getSize(); ++i) {
+    //??? access to elements
+  }
+  return ans;
+}
+bool testElementAccess() {
+  Vector<int> v;
+  v.pushBack(10);
+  return v.at(0) == 10;
+}
+bool testFailAtAccess() {
+  Vector<int> v;
+  v.pushBack(12);
+  try {
+    return 1 == v.at(1) && 1 == v.at(-1);
+  } catch (...) {
+    return true;
+  }
+}
 
 int main() {
   using test_t = bool(*)();
   using case_t = std::pair<test_t, const char *>;
   case_t tests[] = {
-    { testConstructAndDistruct, "Vector must be constructable and destructable" },
+    { testConstructAndDistruct, "Vector must be constructable and destructible" },
     { testIsEmpty, "Default constructor constructed vector must be empty" },
     { testGetSize, "Size of default constructed vector should be zero" },
     { testSizeOfNonEmptyVector, "Size of non-empty vector must be greater than zero" },
@@ -117,12 +141,15 @@ int main() {
     { testGetCapacityOfNonEmptyVector, "Capacity of non-empty vector should be greater than zero" },
     { testIfDefaultAndZeroVectorsAreTheSame, "All constructors should lead to the same vector being created" },
     { testPushBackOnGuaranteedBiggerCapacity, "Push back should push an element into the vector" },
-    { testResizeOnPush, "Vector should resize upon recieving more elements than promised" },
-    { testIfPushAndDefaultConsturctedAreSame, "Constructed and pushed into vectors shoul yield the same vector in everything but capacity" },
+    { testResizeOnPush, "Vector should resize upon receiving more elements than promised" },
+    { testIfPushAndDefaultConsturctedAreSame, "Constructed and pushed into vectors should yield the same vector in everything but capacity" },
     { testPopForOneIn, "Pop function should throw the last element from vector" },
     { testPopForZeroVector, "Pop function should throw error if there are no elements in the vector" },
     { testIfPopNotDownsizesTheVector, "Pop function should not downsize the vector" },
-    { testIfDefaultAndDownsizedAreEqualPop, "Popped vector should be same as default vector in all but capacity" }
+    { testIfDefaultAndDownsizedAreEqualPop, "Popped vector should be same as default vector in all but capacity" },
+    { testCopyConstructor, "Copy constructor should copy the vector"},
+    { testElementAccess, "Elements should be accessed correctly"},
+    { testFailAtAccess, "Access failures should be properly registered"}
   };
 
   constexpr size_t count = sizeof(tests)/sizeof(case_t);
